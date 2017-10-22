@@ -1,0 +1,23 @@
+echo "export SENDGRID_API_KEY='PUT API KEY HERE'" > sendgrid.env
+echo "sendgrid.env" >> .gitignore
+source ./sendgrid.env
+
+pip install sendgrid
+
+
+# using SendGrid's Python Library
+# https://github.com/sendgrid/sendgrid-python
+import sendgrid
+import os
+from sendgrid.helpers.mail import *
+
+sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
+from_email = Email("thejkkhanna@gmail.com")
+to_email = Email("thejkkhanna@gmail.com")
+subject = "Pipes"
+content = Content("text/plain", "Your pipes are at risk of freezing!")
+mail = Mail(from_email, subject, to_email, content)
+response = sg.client.mail.send.post(request_body=mail.get())
+print(response.status_code)
+print(response.body)
+print(response.headers)
